@@ -1,0 +1,46 @@
+.input-area {
+  height: 3rem;
+  width: 30rem;
+  display: flex;
+  justify-content: space-around;
+  gap: 0.8rem;
+  margin: 1rem;
+  padding: 0.3rem;
+}
+
+@keyframes clicked {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.button {
+  height: 100%;
+  width: 7rem;
+  background-color: #5292fe;
+  color: white;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+button:active {
+  animation: clicked 0.2s ease;
+}
+
+.input {
+  height: 100%;
+  width: 20rem;
+  border: 1px solid transparent;
+  border-bottom: 2px solid #88878745;
+  border-radius: 0;
+  background-color: transparent;
+  outline: none;
+  color: rgba(1, 1, 1, 0.364);
+}
