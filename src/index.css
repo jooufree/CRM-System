@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+html {
+  margin: 0;
+  padding: 0;
+}
+
 button {
   border: none;
 }
@@ -30,6 +35,21 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 2rem 0;
   padding: 1rem;
+}
+
+@keyframes clicked {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+button:active {
+  animation: clicked 0.2s ease;
 }

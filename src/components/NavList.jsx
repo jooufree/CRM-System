@@ -1,7 +1,7 @@
 import classes from './NavList.module.css';
 import { NavLink } from 'react-router';
 
-export default function NavList({ children }) {
+export default function NavList({ tasksInfo }) {
   return (
     <nav className={classes['nav-bar-area']}>
       <NavLink
@@ -9,19 +9,19 @@ export default function NavList({ children }) {
         end
         className={({ isActive }) => (isActive ? classes.active : classes.link)}
       >
-        Все задачи
+        Все задачи ({tasksInfo.all})
       </NavLink>
       <NavLink
         to='/process'
         className={({ isActive }) => (isActive ? classes.active : classes.link)}
       >
-        В прогрессе
+        В прогрессе ({tasksInfo.inWork})
       </NavLink>
       <NavLink
         to='/done'
         className={({ isActive }) => (isActive ? classes.active : classes.link)}
       >
-        Сделано
+        Сделано ({tasksInfo.completed})
       </NavLink>
     </nav>
   );

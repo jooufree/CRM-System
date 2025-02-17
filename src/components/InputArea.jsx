@@ -1,19 +1,6 @@
 import classes from './InputArea.module.css';
-import { useState } from 'react';
-import { updateUserPlaces } from '../http';
 
-export default function InputArea() {
-  const [inputValue, setInputValue] = useState('');
-
-  function handleAddTask(value) {
-    if (value.length > 1 && value.length < 65) {
-      updateUserPlaces(value);
-      setInputValue('');
-    } else if (value.length < 2) {
-      alert('Задача должна состоять минимум из 2 символов!');
-    }
-  }
-
+export default function InputArea({ handleChange, inputValue, setInputValue }) {
   return (
     <section className={classes['input-area']}>
       <input
@@ -27,7 +14,7 @@ export default function InputArea() {
       />
       <button
         className={classes.button}
-        onClick={() => handleAddTask(inputValue)}
+        onClick={() => handleChange(inputValue)}
       >
         Add
       </button>
