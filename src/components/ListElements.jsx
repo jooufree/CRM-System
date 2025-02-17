@@ -11,11 +11,12 @@ export default function ListElements({
   handleReturn,
 }) {
   const [valueEditingTask, setValueEditingTask] = useState('');
+
   return (
-    <>
+    <ul className={classes.ul}>
       {tasks.map((task) =>
         checkEditing(task.id) ? (
-          <div className={classes.task} key={task.id}>
+          <li className={classes.task} key={task.id}>
             <div className={`${classes['task-block']} ${classes.edited}`}>
               <textarea
                 className={classes['edited-value']}
@@ -43,9 +44,9 @@ export default function ListElements({
                 ↳
               </button>
             </div>
-          </div>
+          </li>
         ) : (
-          <div className={classes.task} key={task.id}>
+          <li className={classes.task} key={task.id}>
             <input
               type='checkbox'
               onChange={() => handleCheckedTask(task.id, task.isDone)}
@@ -68,9 +69,9 @@ export default function ListElements({
                 ✖
               </button>
             </div>
-          </div>
+          </li>
         ),
       )}
-    </>
+    </ul>
   );
 }

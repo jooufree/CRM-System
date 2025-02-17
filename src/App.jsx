@@ -111,25 +111,27 @@ function App() {
   return (
     <BrowserRouter>
       <main>
-        <InputArea
-          handleChange={handleAddTask}
-          inputValue={inputValue}
-          setInputValue={setInputValue}
-        />
-        {!error ? (
-          <NavList tasksInfo={tasksInfo} />
-        ) : (
-          <ErrorPage title='An error occurred!' message={error.message} />
-        )}
-        <Routes>
-          {routes.map(({ path, tasks }) => (
-            <Route
-              key={path}
-              path={path}
-              element={<ListElements tasks={tasks} {...elementProps} />}
-            />
-          ))}
-        </Routes>
+        <div className='todo-wrapper'>
+          <InputArea
+            handleChange={handleAddTask}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+          />
+          {!error ? (
+            <NavList tasksInfo={tasksInfo} />
+          ) : (
+            <ErrorPage title='An error occurred!' message={error.message} />
+          )}
+          <Routes>
+            {routes.map(({ path, tasks }) => (
+              <Route
+                key={path}
+                path={path}
+                element={<ListElements tasks={tasks} {...elementProps} />}
+              />
+            ))}
+          </Routes>
+        </div>
       </main>
     </BrowserRouter>
   );

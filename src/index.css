@@ -4,7 +4,8 @@
   box-sizing: border-box;
 }
 
-html {
+html,
+body {
   margin: 0;
   padding: 0;
 }
@@ -36,6 +37,30 @@ main {
   justify-content: center;
   align-items: center;
   padding: 1rem;
+}
+
+@keyframes borderAnimation {
+  0% {
+    border-color: #a2a0f2;
+  }
+  50% {
+    border-color: #007bff;
+  }
+  100% {
+    border-color: #a2a0f2;
+  }
+}
+
+.todo-wrapper {
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 35rem;
+  border: 3px solid #3399ff;
+  border-radius: 0.3rem;
+  animation: borderAnimation 6s infinite;
+  background: linear-gradient(white, rgba(79, 79, 248, 0.508));
 }
 
 @keyframes clicked {
