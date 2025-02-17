@@ -28,6 +28,21 @@ function App() {
 
   const [inputValue, setInputValue] = useState('');
 
+  const elementProps = {
+    handleDeleteTask,
+    handleCheckedTask,
+    handleEditTask,
+    handleChangeTask,
+    checkEditing,
+    handleReturn,
+  };
+
+  const routes = [
+    { path: '/', tasks: allTasks },
+    { path: '/process', tasks: inWorkTasks },
+    { path: '/done', tasks: completedTasks },
+  ];
+
   useEffect(() => {
     async function fetchUserTasks() {
       try {
@@ -107,48 +122,13 @@ function App() {
           <ErrorPage title='An error occurred!' message={error.message} />
         )}
         <Routes>
-          <Route
-            path='/'
-            element={
-              <ListElements
-                tasks={allTasks}
-                handleDeleteTask={handleDeleteTask}
-                handleCheckedTask={handleCheckedTask}
-                handleEditTask={handleEditTask}
-                handleChangeTask={handleChangeTask}
-                checkEditing={checkEditing}
-                handleReturn={handleReturn}
-              />
-            }
-          />
-          <Route
-            path='/process'
-            element={
-              <ListElements
-                tasks={inWorkTasks}
-                handleDeleteTask={handleDeleteTask}
-                handleCheckedTask={handleCheckedTask}
-                handleEditTask={handleEditTask}
-                handleChangeTask={handleChangeTask}
-                checkEditing={checkEditing}
-                handleReturn={handleReturn}
-              />
-            }
-          />
-          <Route
-            path='/done'
-            element={
-              <ListElements
-                tasks={completedTasks}
-                handleDeleteTask={handleDeleteTask}
-                handleCheckedTask={handleCheckedTask}
-                handleEditTask={handleEditTask}
-                handleChangeTask={handleChangeTask}
-                checkEditing={checkEditing}
-                handleReturn={handleReturn}
-              />
-            }
-          />
+          {routes.map(({ path, tasks }) => (
+            <Route
+              key={path}
+              path={path}
+              element={<ListElements tasks={tasks} {...elementProps} />}
+            />
+          ))}
         </Routes>
       </main>
     </BrowserRouter>
