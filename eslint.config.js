@@ -1,12 +1,12 @@
-import globals from 'globals';
-import pluginJs from '@eslint/js';
-import pluginReact from 'eslint-plugin-react';
-import pluginPrettier from 'eslint-plugin-prettier';
-import configPrettier from 'eslint-config-prettier';
+import globals from "globals";
+import pluginJs from "@eslint/js";
+import pluginReact from "eslint-plugin-react";
+import pluginPrettier from "eslint-plugin-prettier";
+import configPrettier from "eslint-config-prettier";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  { files: ['**/*.{js,mjs,cjs,jsx}'] },
+  { files: ["**/*.{js,mjs,cjs,jsx}"] },
   { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
   pluginReact.configs.flat.recommended,
@@ -17,15 +17,14 @@ export default [
     },
     settings: {
       react: {
-        version: 'detect',
+        version: "detect",
       },
     },
     rules: {
-      'prefer-const': 'warn',
-      'prettier/prettier': 'error',
-      'no-console': 'warn',
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
+      "prefer-const": "warn",
+      "prettier/prettier": "error",
+      "no-console": "warn",
+      "react/react-in-jsx-scope": "off",
     },
   },
 ];
