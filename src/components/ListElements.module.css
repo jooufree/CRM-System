@@ -57,10 +57,12 @@
   flex-wrap: nowrap;
 }
 
-.edit {
+.edit,
+.confirm {
   background-color: #5292fe;
 }
 
-.delete {
+.delete,
+.return {
   background-color: #ff6659;
 }

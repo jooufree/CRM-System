@@ -20,7 +20,7 @@ export default function ListElements({
             <div className={`${classes['task-block']} ${classes.edited}`}>
               <textarea
                 className={classes['edited-value']}
-                defaultValue={task.title}
+                defaultValue={valueEditingTask}
                 onChange={(event) => setValueEditingTask(event.target.value)}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter') {
@@ -32,13 +32,16 @@ export default function ListElements({
             </div>
             <div className={classes['button-block']}>
               <button
-                className={`${classes.button} ${classes['edit']}`}
-                onClick={() => handleChangeTask(task.id, valueEditingTask)}
+                className={`${classes.button} ${classes['confirm']}`}
+                onClick={() => {
+                  handleChangeTask(task.id, valueEditingTask);
+                  setValueEditingTask('');
+                }}
               >
                 ✓
               </button>
               <button
-                className={`${classes.button} ${classes['delete']}`}
+                className={`${classes.button} ${classes['return']}`}
                 onClick={handleReturn}
               >
                 ↳
@@ -58,7 +61,10 @@ export default function ListElements({
             <div className={classes['button-block']}>
               <button
                 className={`${classes.button} ${classes['edit']}`}
-                onClick={() => handleEditTask(task.id)}
+                onClick={() => {
+                  handleEditTask(task.id);
+                  setValueEditingTask(task.title);
+                }}
               >
                 ✐
               </button>
