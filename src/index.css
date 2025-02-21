@@ -10,10 +10,6 @@ body {
   padding: 0;
 }
 
-button {
-  border: none;
-}
-
 :focus::-webkit-input-placeholder {
   color: transparent;
 }
@@ -30,13 +26,12 @@ button {
   color: transparent;
 }
 
-main {
+.main {
   background-color: #f1f6f8;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
 }
 
 @keyframes borderAnimation {
@@ -52,6 +47,7 @@ main {
 }
 
 .todo-wrapper {
+  margin: 1rem auto;
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createElement } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router';
 import {
   fetchTasks,
@@ -6,12 +6,15 @@ import {
   deleteUserTask,
   updateUserStatusTask,
   updateUserTask,
-} from './http';
+} from './api/http';
 
 import InputArea from './components/InputArea';
 import NavList from './components/NavList';
 import ListElements from './components/ListElements';
 import ErrorPage from './components/Error';
+import { Layout, Menu } from 'antd';
+import { BarChartOutlined, UserOutlined } from '@ant-design/icons';
+const { Content, Sider } = Layout;
 
 function App() {
   const [allTasks, setAllTasks] = useState([]);
@@ -41,6 +44,19 @@ function App() {
     { path: '/', tasks: allTasks },
     { path: '/process', tasks: inWorkTasks },
     { path: '/done', tasks: completedTasks },
+  ];
+
+  const items = [
+    {
+      key: 1,
+      icon: createElement(UserOutlined),
+      label: `My Profile`,
+    },
+    {
+      key: 2,
+      icon: createElement(BarChartOutlined),
+      label: `Todo List`,
+    },
   ];
 
   useEffect(() => {
@@ -110,29 +126,52 @@ function App() {
 
   return (
     <BrowserRouter>
-      <main>
-        <div className='todo-wrapper'>
-          <InputArea
-            handleChange={handleAddTask}
-            inputValue={inputValue}
-            setInputValue={setInputValue}
+      <Layout hasSider className='main'>
+        <Sider
+          theme='light'
+          style={{
+            overflow: 'auto',
+            height: '100vh',
+            position: 'sticky',
+            insetInlineStart: 0,
+            top: 0,
+            bottom: 0,
+            scrollbarWidth: 'thin',
+            scrollbarGutter: 'stable',
+          }}
+        >
+          <div className='demo-logo-vertical' />
+          <Menu
+            theme='light'
+            mode='inline'
+            defaultSelectedKeys={['2']}
+            items={items}
           />
-          {!error ? (
-            <NavList tasksInfo={tasksInfo} />
-          ) : (
-            <ErrorPage title='An error occurred!' message={error.message} />
-          )}
-          <Routes>
-            {routes.map(({ path, tasks }) => (
-              <Route
-                key={path}
-                path={path}
-                element={<ListElements tasks={tasks} {...elementProps} />}
-              />
-            ))}
-          </Routes>
-        </div>
-      </main>
+        </Sider>
+        <Content style={{ minHeight: '100vh' }}>
+          <div className='todo-wrapper'>
+            <InputArea
+              handleChange={handleAddTask}
+              inputValue={inputValue}
+              setInputValue={setInputValue}
+            />
+            {!error ? (
+              <NavList tasksInfo={tasksInfo} />
+            ) : (
+              <ErrorPage title='An error occurred!' message={error.message} />
+            )}
+            <Routes>
+              {routes.map(({ path, tasks }) => (
+                <Route
+                  key={path}
+                  path={path}
+                  element={<ListElements tasks={tasks} {...elementProps} />}
+                />
+              ))}
+            </Routes>
+          </div>
+        </Content>
+      </Layout>
     </BrowserRouter>
   );
 }

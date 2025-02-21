@@ -1,5 +1,12 @@
 import { useState } from 'react';
 import classes from './ListElements.module.css';
+import {
+  CheckOutlined,
+  EditOutlined,
+  RollbackOutlined,
+  CloseOutlined,
+} from '@ant-design/icons';
+import { Button } from 'antd';
 
 export default function ListElements({
   tasks,
@@ -31,21 +38,25 @@ export default function ListElements({
               />
             </div>
             <div className={classes['button-block']}>
-              <button
+              <Button
+                color='primary'
+                variant='solid'
                 className={`${classes.button} ${classes['confirm']}`}
                 onClick={() => {
                   handleChangeTask(task.id, valueEditingTask);
                   setValueEditingTask('');
                 }}
               >
-                ✓
-              </button>
-              <button
+                <CheckOutlined />
+              </Button>
+              <Button
+                color='danger'
+                variant='solid'
                 className={`${classes.button} ${classes['return']}`}
                 onClick={handleReturn}
               >
-                ↳
-              </button>
+                <RollbackOutlined />
+              </Button>
             </div>
           </li>
         ) : (
@@ -59,21 +70,25 @@ export default function ListElements({
               {task.isDone ? <s>{task.title}</s> : task.title}
             </div>
             <div className={classes['button-block']}>
-              <button
+              <Button
+                color='primary'
+                variant='solid'
                 className={`${classes.button} ${classes['edit']}`}
                 onClick={() => {
                   handleEditTask(task.id);
                   setValueEditingTask(task.title);
                 }}
               >
-                ✐
-              </button>
-              <button
+                <EditOutlined />
+              </Button>
+              <Button
+                color='danger'
+                variant='solid'
                 className={`${classes.button} ${classes['delete']}`}
                 onClick={() => handleDeleteTask(task.id)}
               >
-                ✖
-              </button>
+                <CloseOutlined />
+              </Button>
             </div>
           </li>
         ),
