@@ -7,14 +7,14 @@ import {
   updateUserStatusTask,
   updateUserTask,
 } from './api/http';
+import { Layout, Menu, Form } from 'antd';
+import { BarChartOutlined, UserOutlined } from '@ant-design/icons';
+const { Content, Sider } = Layout;
 
 import InputArea from './components/InputArea';
 import NavList from './components/NavList';
 import ListElements from './components/ListElements';
 import ErrorPage from './components/Error';
-import { Layout, Menu } from 'antd';
-import { BarChartOutlined, UserOutlined } from '@ant-design/icons';
-const { Content, Sider } = Layout;
 
 function App() {
   const [allTasks, setAllTasks] = useState([]);
@@ -29,7 +29,7 @@ function App() {
   const [isChange, setIsChange] = useState(false);
   const [error, setError] = useState();
 
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue] = Form.useForm();
 
   const elementProps = {
     handleDeleteTask,
@@ -81,11 +81,9 @@ function App() {
   function handleAddTask(value) {
     if (value.length > 1 && value.length < 65) {
       createUserTask(value);
-      setInputValue('');
+      inputValue.resetFields();
       setIsChange(true);
-    } else if (value.length < 2) {
-      alert('Задача должна состоять минимум из 2 символов!');
-    }
+    } else return;
   }
 
   function handleCheckedTask(id, isDone) {
@@ -150,11 +148,7 @@ function App() {
         </Sider>
         <Content style={{ minHeight: '100vh' }}>
           <div className='todo-wrapper'>
-            <InputArea
-              handleChange={handleAddTask}
-              inputValue={inputValue}
-              setInputValue={setInputValue}
-            />
+            <InputArea handleChange={handleAddTask} inputValue={inputValue} />
             {!error ? (
               <NavList tasksInfo={tasksInfo} />
             ) : (
