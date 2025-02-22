@@ -28,7 +28,11 @@ export default function InputArea({ handleChange, inputValue }) {
         ]}
       >
         <Input
-          className={classes.input}
+          style={{
+            height: '2.5rem',
+            width: '20rem',
+            background: 'transparent',
+          }}
           type='text'
           placeholder='Task To Be Done...'
           variant='underlined'

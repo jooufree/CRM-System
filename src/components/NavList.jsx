@@ -1,9 +1,10 @@
+import { Space } from 'antd';
 import classes from './NavList.module.css';
 import { NavLink } from 'react-router';
 
 export default function NavList({ tasksInfo }) {
   return (
-    <nav className={classes['nav-bar-area']}>
+    <Space className={classes['nav-bar-area']}>
       <NavLink
         to='/'
         end
@@ -23,6 +24,6 @@ export default function NavList({ tasksInfo }) {
       >
         Сделано ({tasksInfo.completed})
       </NavLink>
-    </nav>
+    </Space>
   );
 }

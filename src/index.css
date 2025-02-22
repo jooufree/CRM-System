@@ -48,6 +48,7 @@ body {
 
 .todo-wrapper {
   margin: 1rem auto;
+  min-height: 96vh;
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
@@ -74,3 +75,9 @@ body {
 button:active {
   animation: clicked 0.2s ease;
 }
+
+/* .ant-layout-sider-trigger {
+  background-color: #f1f6f8 !important;
+  color: rgb(0, 0, 0) !important;
+  border-right: 3px solid #3399ff !important;
+} */

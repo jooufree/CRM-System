@@ -6,7 +6,8 @@ import {
   RollbackOutlined,
   CloseOutlined,
 } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, Checkbox, Col, Row } from 'antd';
+import TextArea from 'antd/es/input/TextArea';
 
 export default function ListElements({
   tasks,
@@ -20,12 +21,12 @@ export default function ListElements({
   const [valueEditingTask, setValueEditingTask] = useState('');
 
   return (
-    <ul className={classes.ul}>
+    <Row gutter={[0, 16]} justify='center'>
       {tasks.map((task) =>
         checkEditing(task.id) ? (
-          <li className={classes.task} key={task.id}>
+          <Col span={24} className={classes.task} key={task.id}>
             <div className={`${classes['task-block']} ${classes.edited}`}>
-              <textarea
+              <TextArea
                 className={classes['edited-value']}
                 defaultValue={valueEditingTask}
                 onChange={(event) => setValueEditingTask(event.target.value)}
@@ -35,6 +36,18 @@ export default function ListElements({
                   }
                 }}
                 maxLength='64'
+                autoSize={{ maxRows: 3 }}
+                style={{
+                  width: '100%',
+                  maxHeight: '80%',
+                  padding: '0',
+                  margin: '0',
+                  border: '1px solid transparent',
+                  borderBottom: '2px solid #88878745',
+                  borderRadius: '0',
+                  backgroundColor: 'transparent',
+                  outline: 'none',
+                }}
               />
             </div>
             <div className={classes['button-block']}>
@@ -58,13 +71,13 @@ export default function ListElements({
                 <RollbackOutlined />
               </Button>
             </div>
-          </li>
+          </Col>
         ) : (
-          <li className={classes.task} key={task.id}>
-            <input
-              type='checkbox'
+          <Col span={24} className={classes.task} key={task.id}>
+            <Checkbox
               onChange={() => handleCheckedTask(task.id, task.isDone)}
               checked={task.isDone}
+              style={{ colorBorderfontSize: '20' }}
             />
             <div className={classes['task-block']}>
               {task.isDone ? <s>{task.title}</s> : task.title}
@@ -90,9 +103,9 @@ export default function ListElements({
                 <CloseOutlined />
               </Button>
             </div>
-          </li>
+          </Col>
         ),
       )}
-    </ul>
+    </Row>
   );
 }
