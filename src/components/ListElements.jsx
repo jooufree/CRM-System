@@ -6,7 +6,7 @@ import {
   RollbackOutlined,
   CloseOutlined,
 } from '@ant-design/icons';
-import { Button, Checkbox, Col, Row } from 'antd';
+import { Button, Checkbox, Col, Form, Row } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 
 export default function ListElements({
@@ -26,29 +26,48 @@ export default function ListElements({
         checkEditing(task.id) ? (
           <Col span={24} className={classes.task} key={task.id}>
             <div className={`${classes['task-block']} ${classes.edited}`}>
-              <TextArea
-                className={classes['edited-value']}
-                defaultValue={valueEditingTask}
-                onChange={(event) => setValueEditingTask(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    event.preventDefault();
-                  }
-                }}
-                maxLength='64'
-                autoSize={{ maxRows: 3 }}
-                style={{
-                  width: '100%',
-                  maxHeight: '80%',
-                  padding: '0',
-                  margin: '0',
-                  border: '1px solid transparent',
-                  borderBottom: '2px solid #88878745',
-                  borderRadius: '0',
-                  backgroundColor: 'transparent',
-                  outline: 'none',
-                }}
-              />
+              <Form initialValues={{ editingTask: valueEditingTask }}>
+                <Form.Item
+                  name='editingTask'
+                  rules={[
+                    { required: true, message: 'Поле обязательно!' },
+                    {
+                      min: 2,
+                      message: 'Задача должна быть как минимум 2 символа!',
+                    },
+                    {
+                      max: 64,
+                      message: 'Задача должна быть не более 64 символов!',
+                    },
+                  ]}
+                >
+                  <TextArea
+                    className={classes['edited-value']}
+                    value={valueEditingTask}
+                    onChange={(event) =>
+                      setValueEditingTask(event.target.value)
+                    }
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        event.preventDefault();
+                      }
+                    }}
+                    maxLength='64'
+                    autoSize={{ maxRows: 3 }}
+                    style={{
+                      width: '100%',
+                      maxHeight: '80%',
+                      padding: '0',
+                      margin: '0',
+                      border: '1px solid transparent',
+                      borderBottom: '2px solid #88878745',
+                      borderRadius: '0',
+                      backgroundColor: 'transparent',
+                      outline: 'none',
+                    }}
+                  />
+                </Form.Item>
+              </Form>
             </div>
             <div className={classes['button-block']}>
               <Button

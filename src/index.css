@@ -26,14 +26,6 @@ body {
   color: transparent;
 }
 
-.main {
-  background-color: #f1f6f8;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 @keyframes borderAnimation {
   0% {
     border-color: #a2a0f2;
@@ -47,7 +39,7 @@ body {
 }
 
 .todo-wrapper {
-  margin: 1rem auto;
+  margin: 1rem 0;
   min-height: 96vh;
   padding: 2rem 1rem;
   display: flex;
@@ -75,9 +67,3 @@ body {
 button:active {
   animation: clicked 0.2s ease;
 }
-
-/* .ant-layout-sider-trigger {
-  background-color: #f1f6f8 !important;
-  color: rgb(0, 0, 0) !important;
-  border-right: 3px solid #3399ff !important;
-} */

@@ -1,82 +1,81 @@
-export async function fetchTasks(key) {
-  const response = await fetch(
-    `https://easydev.club/api/v1//todos?filter=${key}`,
-  );
-  const resData = await response.json();
+import axios from 'axios';
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch for tasks');
+export async function fetchTasks(key) {
+  try {
+    const response = await axios.get(`https://easydev.club/api/v1/todos`, {
+      params: { filter: key },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(`Failed to fetch for tasks: ${error}`);
   }
-  return { data: resData.data, info: resData.info };
 }
 
 export async function createUserTask(title) {
-  const response = await fetch('https://easydev.club/api/v1/todos', {
-    method: 'POST',
-    body: JSON.stringify({ title: title }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to update user DATA.');
+  try {
+    const response = await axios.post(
+      'https://easydev.club/api/v1/todos',
+      {
+        title: title,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    return response.statusText;
+  } catch (error) {
+    throw new Error(`Failed to fetch for tasks: ${error}`);
   }
-
-  const resData = await response.json();
-
-  return resData.message;
 }
 
 export async function updateUserTask(id, title) {
-  const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify({ title: title }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to update user DATA.');
+  try {
+    const response = await axios.put(
+      `https://easydev.club/api/v1/todos/${id}`,
+      { title: title },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    return response.statusText;
+  } catch (error) {
+    throw new Error(`Failed to fetch for tasks: ${error}`);
   }
-
-  const resData = await response.json();
-
-  return resData.message;
 }
 
 export async function updateUserStatusTask(id, isDone) {
-  const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify({ isDone: !isDone }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to update user DATA.');
+  try {
+    const response = await axios.put(
+      `https://easydev.club/api/v1/todos/${id}`,
+      { isDone: !isDone },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    return response.statusText;
+  } catch (error) {
+    throw new Error(`Failed to fetch for tasks: ${error}`);
   }
-
-  const resData = await response.json();
-
-  return resData.message;
 }
 
 export async function deleteUserTask(id) {
-  const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to delete user DATA.');
+  try {
+    const response = await axios.delete(
+      `https://easydev.club/api/v1/todos/${id}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    return response.statusText;
+  } catch (error) {
+    throw new Error(`Failed to fetch for tasks: ${error}`);
   }
-
-  const resData = await response.text();
-
-  return resData.message;
 }
