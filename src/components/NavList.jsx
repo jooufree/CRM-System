@@ -1,50 +1,28 @@
-import { useState } from 'react';
 import classes from './NavList.module.css';
+import { NavLink } from 'react-router';
 
-export default function NavList({ updateTasks, tasksInfo }) {
-  const [activeButton, setActiveButton] = useState('all');
-
+export default function NavList({ tasksInfo }) {
   return (
     <nav className={classes['nav-bar-area']}>
-      <button
-        className={
-          activeButton === 'all'
-            ? `${classes.button} ${classes.active} `
-            : classes.button
-        }
-        onClick={async () => {
-          setActiveButton('all');
-          await updateTasks('all');
-        }}
+      <NavLink
+        to='/'
+        end
+        className={({ isActive }) => (isActive ? classes.active : classes.link)}
       >
         Все задачи ({tasksInfo.all})
-      </button>
-      <button
-        className={
-          activeButton === 'inWork'
-            ? `${classes.button} ${classes.active} `
-            : classes.button
-        }
-        onClick={async () => {
-          setActiveButton('inWork');
-          await updateTasks('inWork');
-        }}
+      </NavLink>
+      <NavLink
+        to='/process'
+        className={({ isActive }) => (isActive ? classes.active : classes.link)}
       >
-        В процессе ({tasksInfo.inWork})
-      </button>
-      <button
-        className={
-          activeButton === 'completed'
-            ? `${classes.button} ${classes.active} `
-            : classes.button
-        }
-        onClick={async () => {
-          setActiveButton('completed');
-          await updateTasks('completed');
-        }}
+        В прогрессе ({tasksInfo.inWork})
+      </NavLink>
+      <NavLink
+        to='/done'
+        className={({ isActive }) => (isActive ? classes.active : classes.link)}
       >
         Сделано ({tasksInfo.completed})
-      </button>
+      </NavLink>
     </nav>
   );
 }
