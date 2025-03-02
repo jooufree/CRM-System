@@ -1,0 +1,30 @@
+.nav-bar-area {
+  min-height: 2rem;
+  width: 27rem;
+  display: flex;
+  gap: 2rem;
+  justify-content: space-around;
+  padding: 0.2rem;
+}
+
+.button {
+  background-color: transparent;
+  color: rgba(1, 1, 1, 0.62);
+  cursor: pointer;
+}
+
+button:active {
+  animation: none;
+}
+
+.link {
+  text-decoration: none;
+  font-weight: normal;
+  color: gray;
+}
+
+.active {
+  color: #5292fe;
+  font-weight: bold;
+  text-decoration: underline;
+}
