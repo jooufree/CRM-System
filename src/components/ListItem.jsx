@@ -18,7 +18,7 @@ export default function ListItem({ tasks, updateTasks, taskFilter }) {
 
   async function handleChangeTask(id, title) {
     if (title.length < 2) {
-      alert('Длинна задачи не может быть короче 2 символов!');
+      alert('Длинна задачи не может быть короче 2 символов.');
       return;
     }
     await updateUserTask(id, title);
