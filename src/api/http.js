@@ -1,7 +1,7 @@
+const BASE_URL = 'https://easydev.club/api/v1/todos';
+
 export async function fetchTasks(key) {
-  const response = await fetch(
-    `https://easydev.club/api/v1//todos?filter=${key}`,
-  );
+  const response = await fetch(`${BASE_URL}?filter=${key}`);
   const resData = await response.json();
 
   if (!response.ok) {
@@ -11,7 +11,7 @@ export async function fetchTasks(key) {
 }
 
 export async function createUserTask(title) {
-  const response = await fetch('https://easydev.club/api/v1/todos', {
+  const response = await fetch(BASE_URL, {
     method: 'POST',
     body: JSON.stringify({ title: title }),
     headers: {
@@ -29,7 +29,7 @@ export async function createUserTask(title) {
 }
 
 export async function updateUserTask(id, title) {
-  const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
+  const response = await fetch(`${BASE_URL}/${id}`, {
     method: 'PUT',
     body: JSON.stringify({ title: title }),
     headers: {
@@ -47,7 +47,7 @@ export async function updateUserTask(id, title) {
 }
 
 export async function updateUserStatusTask(id, isDone) {
-  const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
+  const response = await fetch(`${BASE_URL}/${id}`, {
     method: 'PUT',
     body: JSON.stringify({ isDone: !isDone }),
     headers: {
@@ -65,7 +65,7 @@ export async function updateUserStatusTask(id, isDone) {
 }
 
 export async function deleteUserTask(id) {
-  const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
+  const response = await fetch(`${BASE_URL}/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
