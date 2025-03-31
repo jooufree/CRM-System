@@ -5,16 +5,6 @@ import classes from './InputArea.module.css';
 export default function InputArea({ updateTasks, taskFilter }) {
   const [inputValue, setInputValue] = useState('');
 
-  // async function handleAddTask(value) {
-  //   if (value.length > 1 && value.length < 65) {
-  //     await createUserTask(value);
-  //     setInputValue('');
-  //     await updateTasks(taskFilter);
-  //   } else if (value.length < 2) {
-  //     alert('Задача должна состоять минимум из 2 символов!');
-  //   }
-  // }
-
   async function handleAddTask() {
     if (inputValue.length > 1 && inputValue.length < 65) {
       await createUserTask(inputValue); // можно и так
