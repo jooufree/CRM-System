@@ -1,6 +1,20 @@
+import { createUserTask } from '../api/http';
+import { useState } from 'react';
 import classes from './InputArea.module.css';
 
-export default function InputArea({ handleChange, inputValue, setInputValue }) {
+export default function InputArea({ updateTasks, taskFilter }) {
+  const [inputValue, setInputValue] = useState('');
+
+  async function handleAddTask() {
+    if (inputValue.length > 1 && inputValue.length < 65) {
+      await createUserTask(inputValue); // можно и так
+      setInputValue('');
+      await updateTasks(taskFilter);
+    } else if (inputValue.length < 2) {
+      alert('Задача должна состоять минимум из 2 символов!');
+    }
+  }
+
   return (
     <section className={classes['input-area']}>
       <input
@@ -12,10 +26,7 @@ export default function InputArea({ handleChange, inputValue, setInputValue }) {
         required
         maxLength='64'
       />
-      <button
-        className={classes.button}
-        onClick={() => handleChange(inputValue)}
-      >
+      <button className={classes.button} onClick={handleAddTask}>
         Add
       </button>
     </section>
