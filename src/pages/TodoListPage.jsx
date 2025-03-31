@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { fetchTasks } from '../api/http';
-
 import InputArea from '../components/InputArea';
 import NavList from '../components/NavList';
 import ListElements from '../components/ListElements';
@@ -12,11 +11,8 @@ export default function TodoListPage() {
     inWork: 0,
     completed: 0,
   });
-
   const [error, setError] = useState();
-
   const [taskFilter, setTaskFilter] = useState('all');
-
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {

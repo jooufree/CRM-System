@@ -5,12 +5,22 @@ import classes from './InputArea.module.css';
 export default function InputArea({ updateTasks, taskFilter }) {
   const [inputValue, setInputValue] = useState('');
 
-  async function handleAddTask(value) {
-    if (value.length > 1 && value.length < 65) {
-      await createUserTask(value);
+  // async function handleAddTask(value) {
+  //   if (value.length > 1 && value.length < 65) {
+  //     await createUserTask(value);
+  //     setInputValue('');
+  //     await updateTasks(taskFilter);
+  //   } else if (value.length < 2) {
+  //     alert('Задача должна состоять минимум из 2 символов!');
+  //   }
+  // }
+
+  async function handleAddTask() {
+    if (inputValue.length > 1 && inputValue.length < 65) {
+      await createUserTask(inputValue); // можно и так
       setInputValue('');
       await updateTasks(taskFilter);
-    } else if (value.length < 2) {
+    } else if (inputValue.length < 2) {
       alert('Задача должна состоять минимум из 2 символов!');
     }
   }
@@ -26,10 +36,7 @@ export default function InputArea({ updateTasks, taskFilter }) {
         required
         maxLength='64'
       />
-      <button
-        className={classes.button}
-        onClick={async () => await handleAddTask(inputValue)}
-      >
+      <button className={classes.button} onClick={handleAddTask}>
         Add
       </button>
     </section>
