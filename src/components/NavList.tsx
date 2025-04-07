@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import classes from './NavList.module.css';
+import { TaskInfo } from '../todos';
 
-export default function NavList({ updateTasks, tasksInfo }) {
-  const [activeButton, setActiveButton] = useState('all');
+type NavListProps = {
+  updateTasks: (filter: string) => Promise<void>;
+  tasksInfo: TaskInfo | undefined;
+};
+
+const NavList: React.FC<NavListProps> = ({ updateTasks, tasksInfo }) => {
+  const [activeButton, setActiveButton] = useState<string>('all');
 
   return (
     <nav className={classes['nav-bar-area']}>
@@ -17,7 +23,7 @@ export default function NavList({ updateTasks, tasksInfo }) {
           await updateTasks('all');
         }}
       >
-        Все задачи ({tasksInfo.all})
+        Все задачи ({tasksInfo?.all})
       </button>
       <button
         className={
@@ -30,7 +36,7 @@ export default function NavList({ updateTasks, tasksInfo }) {
           await updateTasks('inWork');
         }}
       >
-        В процессе ({tasksInfo.inWork})
+        В процессе ({tasksInfo?.inWork})
       </button>
       <button
         className={
@@ -43,8 +49,10 @@ export default function NavList({ updateTasks, tasksInfo }) {
           await updateTasks('completed');
         }}
       >
-        Сделано ({tasksInfo.completed})
+        Сделано ({tasksInfo?.completed})
       </button>
     </nav>
   );
-}
+};
+
+export default NavList;

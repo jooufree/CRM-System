@@ -2,8 +2,13 @@ import { createUserTask } from '../api/http';
 import { useState } from 'react';
 import classes from './InputArea.module.css';
 
-export default function InputArea({ updateTasks, taskFilter }) {
-  const [inputValue, setInputValue] = useState('');
+type InputAreaProps = {
+  updateTasks: (filter: string) => Promise<void>;
+  taskFilter: string;
+};
+
+const InputArea: React.FC<InputAreaProps> = ({ updateTasks, taskFilter }) => {
+  const [inputValue, setInputValue] = useState<string>('');
 
   async function handleAddTask() {
     if (inputValue.length > 1 && inputValue.length < 65) {
@@ -24,11 +29,13 @@ export default function InputArea({ updateTasks, taskFilter }) {
         value={inputValue}
         onChange={(event) => setInputValue(event.target.value)}
         required
-        maxLength='64'
+        maxLength={64}
       />
       <button className={classes.button} onClick={handleAddTask}>
         Add
       </button>
     </section>
   );
-}
+};
+
+export default InputArea;

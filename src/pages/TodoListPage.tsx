@@ -1,32 +1,42 @@
 import { useState, useEffect } from 'react';
 import { fetchTasks } from '../api/http';
+import { Task, TaskInfo } from '../todos';
 import InputArea from '../components/InputArea';
 import NavList from '../components/NavList';
 import ListElements from '../components/ListElements';
 import ErrorPage from '../components/Error';
 
-export default function TodoListPage() {
-  const [tasksInfo, setTasksInfo] = useState({
+const TodoListPage: React.FC = () => {
+  type Error = {
+    message: string;
+  };
+
+  const [tasksInfo, setTasksInfo] = useState<TaskInfo | undefined>({
     all: 0,
     inWork: 0,
     completed: 0,
   });
-  const [error, setError] = useState();
-  const [taskFilter, setTaskFilter] = useState('all');
-  const [tasks, setTasks] = useState([]);
+  const [taskError, setTaskError] = useState<Error>();
+  const [taskFilter, setTaskFilter] = useState<string>('all');
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
     async function fetchUserTasks() {
       try {
         updateTasks(taskFilter);
       } catch (error) {
-        setError({ message: error.message || 'Failed to fetch user tasks.' });
+        setTaskError({
+          message:
+            error instanceof Error
+              ? error.message
+              : 'Failed to fetch user task!',
+        });
       }
     }
     fetchUserTasks();
-  }, []);
+  }, [taskFilter]);
 
-  async function updateTasks(filter) {
+  async function updateTasks(filter: string) {
     const tasks = await fetchTasks(filter);
     setTasks(tasks.data);
     setTasksInfo(tasks.info);
@@ -36,10 +46,10 @@ export default function TodoListPage() {
   return (
     <div className='todo-wrapper'>
       <InputArea updateTasks={updateTasks} taskFilter={taskFilter} />
-      {!error ? (
+      {!taskError ? (
         <NavList updateTasks={updateTasks} tasksInfo={tasksInfo} />
       ) : (
-        <ErrorPage title='An error occurred!' message={error.message} />
+        <ErrorPage title='An error occurred!' message={taskError.message} />
       )}
       <ListElements
         tasks={tasks}
@@ -48,4 +58,6 @@ export default function TodoListPage() {
       />
     </div>
   );
-}
+};
+
+export default TodoListPage;

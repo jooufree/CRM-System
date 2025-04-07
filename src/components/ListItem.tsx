@@ -1,22 +1,35 @@
 import { useState } from 'react';
-
 import {
   updateUserTask,
   deleteUserTask,
   updateUserStatusTask,
 } from '../api/http';
-
+import { Task } from '../todos';
 import classes from './ListItem.module.css';
 
-export default function ListItem({ tasks, updateTasks, taskFilter }) {
-  const [valueEditingTask, setValueEditingTask] = useState('');
-  const [isEditing, setIsEditing] = useState({ id: null });
+type ListItemProps = {
+  tasks: Task[];
+  updateTasks: (filter: string) => Promise<void>;
+  taskFilter: string;
+};
 
-  function handleEditTask(id) {
+type EditingTask = {
+  id: number | null;
+};
+
+const ListItem: React.FC<ListItemProps> = ({
+  tasks,
+  updateTasks,
+  taskFilter,
+}) => {
+  const [valueEditingTask, setValueEditingTask] = useState<string>('');
+  const [isEditing, setIsEditing] = useState<EditingTask>({ id: null });
+
+  function handleEditTask(id: number) {
     setIsEditing({ id });
   }
 
-  async function handleChangeTask(id, title) {
+  async function handleChangeTask(id: number, title: string) {
     if (title.length < 2) {
       alert('Длинна задачи не может быть короче 2 символов.');
       return;
@@ -26,7 +39,7 @@ export default function ListItem({ tasks, updateTasks, taskFilter }) {
     await updateTasks(taskFilter);
   }
 
-  function checkEditing(id) {
+  function checkEditing(id: number) {
     return id === isEditing.id;
   }
 
@@ -34,12 +47,12 @@ export default function ListItem({ tasks, updateTasks, taskFilter }) {
     setIsEditing({ id: null });
   }
 
-  async function handleCheckedTask(id, isDone) {
+  async function handleCheckedTask(id: number, isDone: boolean) {
     await updateUserStatusTask(id, isDone);
     await updateTasks(taskFilter);
   }
 
-  async function handleDeleteTask(id) {
+  async function handleDeleteTask(id: number) {
     await deleteUserTask(id);
     await updateTasks(taskFilter);
   }
@@ -57,7 +70,7 @@ export default function ListItem({ tasks, updateTasks, taskFilter }) {
                 event.preventDefault();
               }
             }}
-            maxLength='64'
+            maxLength={64}
           />
         </div>
         <div className={classes['button-block']}>
@@ -108,4 +121,6 @@ export default function ListItem({ tasks, updateTasks, taskFilter }) {
       </li>
     ),
   );
-}
+};
+
+export default ListItem;
