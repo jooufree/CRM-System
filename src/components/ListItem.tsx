@@ -75,6 +75,7 @@ const ListItem: React.FC<ListItemProps> = ({
         </div>
         <div className={classes['button-block']}>
           <button
+            type='button'
             className={`${classes.button} ${classes['confirm']}`}
             onClick={() => {
               handleChangeTask(task.id, valueEditingTask);
@@ -84,6 +85,7 @@ const ListItem: React.FC<ListItemProps> = ({
             ✓
           </button>
           <button
+            type='button'
             className={`${classes.button} ${classes['return']}`}
             onClick={handleReturn}
           >
@@ -103,6 +105,7 @@ const ListItem: React.FC<ListItemProps> = ({
         </div>
         <div className={classes['button-block']}>
           <button
+            type='button'
             className={`${classes.button} ${classes['edit']}`}
             onClick={() => {
               handleEditTask(task.id);
@@ -112,6 +115,7 @@ const ListItem: React.FC<ListItemProps> = ({
             ✐
           </button>
           <button
+            type='button'
             className={`${classes.button} ${classes['delete']}`}
             onClick={async () => await handleDeleteTask(task.id)}
           >

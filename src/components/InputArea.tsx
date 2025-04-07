@@ -31,7 +31,7 @@ const InputArea: React.FC<InputAreaProps> = ({ updateTasks, taskFilter }) => {
         required
         maxLength={64}
       />
-      <button className={classes.button} onClick={handleAddTask}>
+      <button type='button' className={classes.button} onClick={handleAddTask}>
         Add
       </button>
     </section>

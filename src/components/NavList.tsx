@@ -13,6 +13,7 @@ const NavList: React.FC<NavListProps> = ({ updateTasks, tasksInfo }) => {
   return (
     <nav className={classes['nav-bar-area']}>
       <button
+        type='button'
         className={
           activeButton === 'all'
             ? `${classes.button} ${classes.active} `
@@ -26,6 +27,7 @@ const NavList: React.FC<NavListProps> = ({ updateTasks, tasksInfo }) => {
         Все задачи ({tasksInfo?.all})
       </button>
       <button
+        type='button'
         className={
           activeButton === 'inWork'
             ? `${classes.button} ${classes.active} `
@@ -39,6 +41,7 @@ const NavList: React.FC<NavListProps> = ({ updateTasks, tasksInfo }) => {
         В процессе ({tasksInfo?.inWork})
       </button>
       <button
+        type='button'
         className={
           activeButton === 'completed'
             ? `${classes.button} ${classes.active} `
