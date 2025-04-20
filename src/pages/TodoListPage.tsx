@@ -1,23 +1,19 @@
 import { useState, useEffect } from 'react';
 import { fetchTasks } from '../api/http';
-import { Task, TaskInfo } from '../todos';
+import { Task, TaskInfo, ErrorType, Filter } from '../types/types';
 import InputArea from '../components/InputArea';
 import NavList from '../components/NavList';
 import ListElements from '../components/ListElements';
 import ErrorPage from '../components/Error';
 
 const TodoListPage: React.FC = () => {
-  type Error = {
-    message: string;
-  };
-
-  const [tasksInfo, setTasksInfo] = useState<TaskInfo | undefined>({
+  const [tasksInfo, setTasksInfo] = useState<TaskInfo>({
     all: 0,
     inWork: 0,
     completed: 0,
   });
-  const [taskError, setTaskError] = useState<Error>();
-  const [taskFilter, setTaskFilter] = useState<string>('all');
+  const [taskError, setTaskError] = useState<ErrorType>();
+  const [taskFilter, setTaskFilter] = useState<Filter>('all');
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
@@ -36,7 +32,7 @@ const TodoListPage: React.FC = () => {
     fetchUserTasks();
   }, [taskFilter]);
 
-  async function updateTasks(filter: string) {
+  async function updateTasks(filter: Filter) {
     const tasks = await fetchTasks(filter);
     setTasks(tasks.data);
     setTasksInfo(tasks.info);
@@ -45,17 +41,13 @@ const TodoListPage: React.FC = () => {
 
   return (
     <div className='todo-wrapper'>
-      <InputArea updateTasks={updateTasks} taskFilter={taskFilter} />
+      <InputArea updateTasks={() => updateTasks(taskFilter)} />
       {!taskError ? (
         <NavList updateTasks={updateTasks} tasksInfo={tasksInfo} />
       ) : (
         <ErrorPage title='An error occurred!' message={taskError.message} />
       )}
-      <ListElements
-        tasks={tasks}
-        updateTasks={updateTasks}
-        taskFilter={taskFilter}
-      />
+      <ListElements tasks={tasks} updateTasks={() => updateTasks(taskFilter)} />
     </div>
   );
 };

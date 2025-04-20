@@ -1,21 +1,10 @@
-import { Task, TaskInfo } from '../todos';
+import { Task, TaskInfo, MetaResponse } from '../types/types';
 
 const BASE_URL = 'https://easydev.club/api/v1/todos';
 
-type MetaResponse<T, N> = {
-  data: T[];
-  info?: N;
-  meta: {
-    totalAmount: number;
-  };
-};
-
-type ReturnData = {
-  data: Task[];
-  info?: TaskInfo;
-};
-
-export async function fetchTasks(key: string): Promise<ReturnData> {
+export async function fetchTasks(
+  key: string,
+): Promise<MetaResponse<Task, TaskInfo>> {
   try {
     const response = await fetch(`${BASE_URL}?filter=${key}`);
 
@@ -23,9 +12,9 @@ export async function fetchTasks(key: string): Promise<ReturnData> {
       throw new Error('Failed to fetch user DATA.');
     }
 
-    const data: MetaResponse<Task, TaskInfo> = await response.json();
+    const resData: MetaResponse<Task, TaskInfo> = await response.json();
 
-    return { data: data.data, info: data.info };
+    return resData;
   } catch (error) {
     throw error;
   }
@@ -53,10 +42,7 @@ export async function createUserTask(title: string): Promise<string | Task> {
   }
 }
 
-export async function updateUserTask(
-  id: number,
-  title: string,
-): Promise<string | Task> {
+export async function updateUserTask(id: number, title: string): Promise<Task> {
   try {
     const response = await fetch(`${BASE_URL}/${id}`, {
       method: 'PUT',
@@ -70,7 +56,7 @@ export async function updateUserTask(
       throw new Error('Failed to update user DATA.');
     }
 
-    const resData: string | Task = await response.json();
+    const resData: Task = await response.json();
 
     return resData;
   } catch (error) {
@@ -81,11 +67,11 @@ export async function updateUserTask(
 export async function updateUserStatusTask(
   id: number,
   isDone: boolean,
-): Promise<string | Task> {
+): Promise<Task> {
   try {
     const response = await fetch(`${BASE_URL}/${id}`, {
       method: 'PUT',
-      body: JSON.stringify({ isDone: !isDone }),
+      body: JSON.stringify({ isDone: isDone }),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -95,7 +81,7 @@ export async function updateUserStatusTask(
       throw new Error('Failed to update user DATA.');
     }
 
-    const resData: string | Task = await response.json();
+    const resData: Task = await response.json();
 
     return resData;
   } catch (error) {
@@ -103,22 +89,14 @@ export async function updateUserStatusTask(
   }
 }
 
-export async function deleteUserTask(id: number): Promise<string> {
+export async function deleteUserTask(id: number) {
   try {
-    const response = await fetch(`${BASE_URL}/${id}`, {
+    await fetch(`${BASE_URL}/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to delete user DATA.');
-    }
-
-    const resData: string = await response.text();
-
-    return resData;
   } catch (error) {
     throw error;
   }

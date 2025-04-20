@@ -1,14 +1,9 @@
 import { useState } from 'react';
 import classes from './NavList.module.css';
-import { TaskInfo } from '../todos';
-
-type NavListProps = {
-  updateTasks: (filter: string) => Promise<void>;
-  tasksInfo: TaskInfo | undefined;
-};
+import { NavListProps, Filter } from '../types/types';
 
 const NavList: React.FC<NavListProps> = ({ updateTasks, tasksInfo }) => {
-  const [activeButton, setActiveButton] = useState<string>('all');
+  const [activeButton, setActiveButton] = useState<Filter>('all');
 
   return (
     <nav className={classes['nav-bar-area']}>

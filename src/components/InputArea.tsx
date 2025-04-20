@@ -1,20 +1,16 @@
 import { createUserTask } from '../api/http';
 import { useState } from 'react';
+import { InputAreaProps } from '../types/types';
 import classes from './InputArea.module.css';
 
-type InputAreaProps = {
-  updateTasks: (filter: string) => Promise<void>;
-  taskFilter: string;
-};
-
-const InputArea: React.FC<InputAreaProps> = ({ updateTasks, taskFilter }) => {
+const InputArea: React.FC<InputAreaProps> = ({ updateTasks }) => {
   const [inputValue, setInputValue] = useState<string>('');
 
   async function handleAddTask() {
     if (inputValue.length > 1 && inputValue.length < 65) {
       await createUserTask(inputValue); // можно и так
       setInputValue('');
-      await updateTasks(taskFilter);
+      await updateTasks();
     } else if (inputValue.length < 2) {
       alert('Задача должна состоять минимум из 2 символов!');
     }

@@ -1,25 +1,13 @@
 import classes from './ListElements.module.css';
 import ListItem from './ListItem';
-import { Task } from '../todos';
+import { ListElementsProps } from '../types/types';
 
-type ListElementsProps = {
-  tasks: Task[];
-  updateTasks: (filter: string) => Promise<void>;
-  taskFilter: string;
-};
-
-const ListElements: React.FC<ListElementsProps> = ({
-  tasks,
-  updateTasks,
-  taskFilter,
-}) => {
+const ListElements: React.FC<ListElementsProps> = ({ tasks, updateTasks }) => {
   return (
     <ul className={classes.ul}>
-      <ListItem
-        tasks={tasks}
-        updateTasks={updateTasks}
-        taskFilter={taskFilter}
-      />
+      {tasks.map((task) => (
+        <ListItem task={task} updateTasks={updateTasks} key={task.id} />
+      ))}
     </ul>
   );
 };
