@@ -1,4 +1,8 @@
-import { ErrorProps } from '../types/types';
+type ErrorProps = {
+  title: string;
+  message: string;
+  onConfirm?: () => Promise<void>;
+};
 
 const Error: React.FC<ErrorProps> = ({ title, message, onConfirm }) => {
   return (

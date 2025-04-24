@@ -1,6 +1,11 @@
 import classes from './ListElements.module.css';
 import ListItem from './ListItem';
-import { ListElementsProps } from '../types/types';
+import { Task } from '../types/types';
+
+type ListElementsProps = {
+  tasks: Task[];
+  updateTasks: () => Promise<void>;
+};
 
 const ListElements: React.FC<ListElementsProps> = ({ tasks, updateTasks }) => {
   return (

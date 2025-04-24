@@ -1,7 +1,10 @@
 import { createUserTask } from '../api/http';
 import { useState } from 'react';
-import { InputAreaProps } from '../types/types';
 import classes from './InputArea.module.css';
+
+export type InputAreaProps = {
+  updateTasks: () => Promise<void>;
+};
 
 const InputArea: React.FC<InputAreaProps> = ({ updateTasks }) => {
   const [inputValue, setInputValue] = useState<string>('');

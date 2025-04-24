@@ -1,27 +1,34 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   updateUserTask,
   deleteUserTask,
   updateUserStatusTask,
 } from '../api/http';
-import { ListItemProps } from '../types/types';
+import { Task } from '../types/types';
 import classes from './ListItem.module.css';
+
+export type ListItemProps = {
+  task: Task;
+  updateTasks: () => Promise<void>;
+};
 
 const ListItem: React.FC<ListItemProps> = ({ task, updateTasks }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [currentValue, setCurrentValue] = useState<string>(task.title);
 
-  function handleEditTask() {
+  function handleStartEdit() {
     setIsEditing(true);
   }
 
-  async function handleChangeTask() {
-    const title: string | undefined = textareaRef.current?.value.trim();
-    if (!title || title.length < 2) {
+  async function handleChangeTask(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!currentValue || currentValue.length < 2) {
       alert('Длинна задачи не может быть короче 2 символов.');
       return;
     }
-    await updateUserTask(task.id, title);
+
+    await updateUserTask(task.id, currentValue);
     setIsEditing(false);
     await updateTasks();
   }
@@ -32,6 +39,7 @@ const ListItem: React.FC<ListItemProps> = ({ task, updateTasks }) => {
 
   function handleReturn() {
     setIsEditing(false);
+    setCurrentValue(task.title);
   }
 
   async function handleCheckedTask(id: number, isDone: boolean) {
@@ -45,18 +53,18 @@ const ListItem: React.FC<ListItemProps> = ({ task, updateTasks }) => {
   }
 
   return checkEditing() ? (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        handleChangeTask();
-      }}
-    >
-      <li className={classes.task}>
+    <li className={classes.task}>
+      <form
+        className={classes['list-item-form']}
+        onSubmit={(event) => {
+          handleChangeTask(event);
+        }}
+      >
         <div className={`${classes['task-block']} ${classes.edited}`}>
           <textarea
-            ref={textareaRef}
             className={classes['edited-value']}
-            defaultValue={task.title}
+            value={currentValue}
+            onChange={(event) => setCurrentValue(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
                 event.preventDefault();
@@ -80,13 +88,13 @@ const ListItem: React.FC<ListItemProps> = ({ task, updateTasks }) => {
             ↳
           </button>
         </div>
-      </li>
-    </form>
+      </form>
+    </li>
   ) : (
     <li className={classes.task}>
       <input
         type='checkbox'
-        onChange={async () => await handleCheckedTask(task.id, task.isDone)}
+        onChange={() => handleCheckedTask(task.id, task.isDone)}
         checked={task.isDone}
       />
       <div className={classes['task-block']}>
@@ -97,7 +105,7 @@ const ListItem: React.FC<ListItemProps> = ({ task, updateTasks }) => {
           type='button'
           className={`${classes.button} ${classes['edit']}`}
           onClick={() => {
-            handleEditTask();
+            handleStartEdit();
           }}
         >
           ✐
@@ -105,7 +113,7 @@ const ListItem: React.FC<ListItemProps> = ({ task, updateTasks }) => {
         <button
           type='button'
           className={`${classes.button} ${classes['delete']}`}
-          onClick={async () => await handleDeleteTask(task.id)}
+          onClick={() => handleDeleteTask(task.id)}
         >
           ✖
         </button>

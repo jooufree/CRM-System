@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import classes from './NavList.module.css';
-import { NavListProps, Filter } from '../types/types';
+import { Filter, TaskInfo } from '../types/types';
+
+export type NavListProps = {
+  updateTasks: (filter: Filter) => Promise<void>;
+  tasksInfo: TaskInfo;
+};
 
 const NavList: React.FC<NavListProps> = ({ updateTasks, tasksInfo }) => {
   const [activeButton, setActiveButton] = useState<Filter>('all');

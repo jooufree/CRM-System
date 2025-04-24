@@ -1,9 +1,9 @@
-import { Task, TaskInfo, MetaResponse } from '../types/types';
+import { Task, TaskInfo, MetaResponse, Filter } from '../types/types';
 
 const BASE_URL = 'https://easydev.club/api/v1/todos';
 
 export async function fetchTasks(
-  key: string,
+  key: Filter,
 ): Promise<MetaResponse<Task, TaskInfo>> {
   try {
     const response = await fetch(`${BASE_URL}?filter=${key}`);
