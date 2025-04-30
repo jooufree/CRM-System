@@ -32,9 +32,10 @@ button {
 
 main {
   background-color: #f1f6f8;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 1rem;
 }

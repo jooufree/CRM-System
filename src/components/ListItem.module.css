@@ -61,3 +61,9 @@
 .return {
   background-color: #ff6659;
 }
+
+.list-item-form {
+  margin: 0;
+  padding: 0;
+  display: contents;
+}
