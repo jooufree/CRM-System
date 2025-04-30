@@ -54,12 +54,7 @@ const ListItem: React.FC<ListItemProps> = ({ task, updateTasks }) => {
 
   return checkEditing() ? (
     <li className={classes.task}>
-      <form
-        className={classes['list-item-form']}
-        onSubmit={(event) => {
-          handleChangeTask(event);
-        }}
-      >
+      <form className={classes['list-item-form']} onSubmit={handleChangeTask}>
         <div className={`${classes['task-block']} ${classes.edited}`}>
           <textarea
             className={classes['edited-value']}
