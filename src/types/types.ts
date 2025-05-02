@@ -24,3 +24,7 @@ export type MetaResponse<T, N> = {
     totalAmount: number;
   };
 };
+
+export type FormValue = {
+  value: string;
+};

@@ -30,6 +30,9 @@ const TodoListPage: React.FC = () => {
       }
     }
     fetchUserTasks();
+
+    const intervalId: number = setInterval(fetchUserTasks, 5000);
+    return () => clearInterval(intervalId);
   }, [taskFilter]);
 
   async function updateTasks(filter: Filter) {

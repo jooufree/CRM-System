@@ -1,20 +1,22 @@
 import { Task, TaskInfo, MetaResponse, Filter } from '../types/types';
+import axios from 'axios';
 
-const BASE_URL = 'https://easydev.club/api/v1/todos';
+const api = axios.create({
+  baseURL: 'https://easydev.club/api/v1/todos',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
 export async function fetchTasks(
   key: Filter,
 ): Promise<MetaResponse<Task, TaskInfo>> {
   try {
-    const response = await fetch(`${BASE_URL}?filter=${key}`);
+    const response = await api.get('', {
+      params: { filter: key },
+    });
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch user DATA.');
-    }
-
-    const resData: MetaResponse<Task, TaskInfo> = await response.json();
-
-    return resData;
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -22,21 +24,11 @@ export async function fetchTasks(
 
 export async function createUserTask(title: string): Promise<string | Task> {
   try {
-    const response = await fetch(BASE_URL, {
-      method: 'POST',
-      body: JSON.stringify({ title: title }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    const response = await api.post('', {
+      title,
     });
 
-    if (!response.ok) {
-      throw new Error('Failed to create user DATA.');
-    }
-
-    const resData: string | Task = await response.json();
-
-    return resData;
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -44,21 +36,9 @@ export async function createUserTask(title: string): Promise<string | Task> {
 
 export async function updateUserTask(id: number, title: string): Promise<Task> {
   try {
-    const response = await fetch(`${BASE_URL}/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify({ title: title }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await api.put(`/${id}`, { title: title });
 
-    if (!response.ok) {
-      throw new Error('Failed to update user DATA.');
-    }
-
-    const resData: Task = await response.json();
-
-    return resData;
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -69,21 +49,9 @@ export async function updateUserStatusTask(
   isDone: boolean,
 ): Promise<Task> {
   try {
-    const response = await fetch(`${BASE_URL}/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify({ isDone: isDone }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await api.put(`/${id}`, { isDone: isDone });
 
-    if (!response.ok) {
-      throw new Error('Failed to update user DATA.');
-    }
-
-    const resData: Task = await response.json();
-
-    return resData;
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -91,12 +59,7 @@ export async function updateUserStatusTask(
 
 export async function deleteUserTask(id: number) {
   try {
-    await fetch(`${BASE_URL}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    await api.delete(`/${id}`);
   } catch (error) {
     throw error;
   }

@@ -1,4 +1,4 @@
-import classes from './ListElements.module.css';
+import { List } from 'antd';
 import ListItem from './ListItem';
 import { Task } from '../types/types';
 
@@ -9,11 +9,22 @@ type ListElementsProps = {
 
 const ListElements: React.FC<ListElementsProps> = ({ tasks, updateTasks }) => {
   return (
-    <ul className={classes.ul}>
-      {tasks.map((task) => (
-        <ListItem task={task} updateTasks={updateTasks} key={task.id} />
-      ))}
-    </ul>
+    <List
+      itemLayout='horizontal'
+      dataSource={tasks}
+      renderItem={(task) => (
+        <List.Item
+          key={task.id}
+          style={{
+            margin: 0,
+            padding: 0,
+          }}
+        >
+          <ListItem task={task} updateTasks={updateTasks} />
+        </List.Item>
+      )}
+      split={false}
+    />
   );
 };
 

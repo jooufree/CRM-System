@@ -1,39 +1,59 @@
 import { createUserTask } from '../api/http';
-import { useState } from 'react';
+import { Button, Form, Input, message } from 'antd';
 import classes from './InputArea.module.css';
+import { FormValue } from '../types/types';
 
-export type InputAreaProps = {
+type InputAreaProps = {
   updateTasks: () => Promise<void>;
 };
 
 const InputArea: React.FC<InputAreaProps> = ({ updateTasks }) => {
-  const [inputValue, setInputValue] = useState<string>('');
+  const [form] = Form.useForm<FormValue>();
 
-  async function handleAddTask() {
-    if (inputValue.length > 1 && inputValue.length < 65) {
-      await createUserTask(inputValue); // можно и так
-      setInputValue('');
-      await updateTasks();
-    } else if (inputValue.length < 2) {
-      alert('Задача должна состоять минимум из 2 символов!');
-    }
-  }
+  const onFinish = async (formValue: FormValue) => {
+    message.success({
+      content: 'Задача успешно добавлена!',
+      duration: 2,
+    });
+    await createUserTask(formValue.value);
+    form.resetFields();
+    await updateTasks();
+  };
+
+  const onFinishFailed = () => {
+    message.error('Введите корректную задачу!');
+  };
 
   return (
-    <section className={classes['input-area']}>
-      <input
-        className={classes.input}
-        type='text'
-        placeholder='Task To Be Done...'
-        value={inputValue}
-        onChange={(event) => setInputValue(event.target.value)}
-        required
-        maxLength={64}
-      />
-      <button type='button' className={classes.button} onClick={handleAddTask}>
+    <Form
+      className={classes['input-area']}
+      form={form}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+    >
+      <Form.Item
+        name='value'
+        rules={[
+          { required: true, message: 'Поле обязательно!' },
+          { min: 2, message: 'Задача должна быть как минимум 2 символа!' },
+          { max: 64, message: 'Задача должна быть не более 64 символов!' },
+        ]}
+      >
+        <Input
+          style={{
+            height: '2.5rem',
+            width: '20rem',
+            background: 'transparent',
+          }}
+          type='text'
+          placeholder='Task To Be Done...'
+          variant='underlined'
+        />
+      </Form.Item>
+      <Button type='primary' className={classes.button} htmlType='submit'>
         Add
-      </button>
-    </section>
+      </Button>
+    </Form>
   );
 };
 

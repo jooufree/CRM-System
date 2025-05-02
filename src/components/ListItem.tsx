@@ -4,116 +4,134 @@ import {
   deleteUserTask,
   updateUserStatusTask,
 } from '../api/http';
-import { Task } from '../types/types';
+import { Task, FormValue } from '../types/types';
 import classes from './ListItem.module.css';
+import { Button, Checkbox, Space, Typography, Form, message } from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  CheckOutlined,
+  RollbackOutlined,
+} from '@ant-design/icons';
 
-export type ListItemProps = {
+const { Text } = Typography;
+
+type ListItemProps = {
   task: Task;
   updateTasks: () => Promise<void>;
 };
 
 const ListItem: React.FC<ListItemProps> = ({ task, updateTasks }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [currentValue, setCurrentValue] = useState<string>(task.title);
+  const [form] = Form.useForm<FormValue>();
 
-  function handleStartEdit() {
+  const handleStartEdit = () => {
+    form.setFieldsValue({ value: task.title });
     setIsEditing(true);
-  }
+  };
 
-  async function handleChangeTask(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (!currentValue || currentValue.length < 2) {
-      alert('Длинна задачи не может быть короче 2 символов.');
-      return;
-    }
-
-    await updateUserTask(task.id, currentValue);
+  const handleReturn = () => {
     setIsEditing(false);
-    await updateTasks();
-  }
+    form.resetFields();
+  };
 
-  function checkEditing() {
-    return isEditing;
-  }
-
-  function handleReturn() {
+  const handleChangeTask = async (formValue: FormValue) => {
+    if (!formValue.value || formValue.value.length < 2) return;
+    await updateUserTask(task.id, formValue.value);
     setIsEditing(false);
-    setCurrentValue(task.title);
-  }
-
-  async function handleCheckedTask(id: number, isDone: boolean) {
-    await updateUserStatusTask(id, !isDone);
+    message.success('Задача обновлена');
     await updateTasks();
-  }
+  };
 
-  async function handleDeleteTask(id: number) {
-    await deleteUserTask(id);
+  const handleCheckedTask = async () => {
+    await updateUserStatusTask(task.id, !task.isDone);
     await updateTasks();
-  }
+  };
 
-  return checkEditing() ? (
-    <li className={classes.task}>
-      <form className={classes['list-item-form']} onSubmit={handleChangeTask}>
+  const handleDeleteTask = async () => {
+    await deleteUserTask(task.id);
+    message.success('Задача удалена');
+    await updateTasks();
+  };
+
+  return (
+    <div className={classes.task}>
+      {isEditing ? (
         <div className={`${classes['task-block']} ${classes.edited}`}>
-          <textarea
-            className={classes['edited-value']}
-            value={currentValue}
-            onChange={(event) => setCurrentValue(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                event.preventDefault();
-              }
-            }}
-            maxLength={64}
-          />
+          <Form form={form} onFinish={handleChangeTask} layout='inline'>
+            <Form.Item
+              name='value'
+              rules={[
+                { required: true, message: 'Поле обязательно!' },
+                { min: 2, message: 'Минимум 2 символа' },
+                { max: 64, message: 'Максимум 64 символа' },
+              ]}
+              style={{ flexGrow: 1, marginRight: '1rem' }}
+            >
+              <TextArea
+                onPressEnter={(event) => {
+                  event.preventDefault();
+                  form.submit();
+                }}
+                maxLength={64}
+                autoSize={{ maxRows: 3 }}
+                style={{
+                  width: '100%',
+                  maxHeight: '80%',
+                  padding: '0',
+                  margin: '0',
+                  border: '1px solid transparent',
+                  borderBottom: '2px solid #88878745',
+                  borderRadius: '0',
+                  backgroundColor: 'transparent',
+                  outline: 'none',
+                }}
+              />
+            </Form.Item>
+            <Space className={classes['button-block']}>
+              <Button
+                htmlType='submit'
+                icon={<CheckOutlined />}
+                color='primary'
+                variant='solid'
+              />
+              <Button
+                color='danger'
+                variant='solid'
+                onClick={handleReturn}
+                icon={<RollbackOutlined />}
+              />
+            </Space>
+          </Form>
         </div>
-        <div className={classes['button-block']}>
-          <button
-            type='submit'
-            className={`${classes.button} ${classes['confirm']}`}
+      ) : (
+        <>
+          <Checkbox checked={task.isDone} onChange={handleCheckedTask} />
+          <Text
+            key={`${task.id}-${task.isDone}`}
+            delete={task.isDone}
+            style={{ flexGrow: 1, marginLeft: '0.5rem', marginRight: '0.5rem' }}
           >
-            ✓
-          </button>
-          <button
-            type='button'
-            className={`${classes.button} ${classes['return']}`}
-            onClick={handleReturn}
-          >
-            ↳
-          </button>
-        </div>
-      </form>
-    </li>
-  ) : (
-    <li className={classes.task}>
-      <input
-        type='checkbox'
-        onChange={() => handleCheckedTask(task.id, task.isDone)}
-        checked={task.isDone}
-      />
-      <div className={classes['task-block']}>
-        {task.isDone ? <s>{task.title}</s> : task.title}
-      </div>
-      <div className={classes['button-block']}>
-        <button
-          type='button'
-          className={`${classes.button} ${classes['edit']}`}
-          onClick={() => {
-            handleStartEdit();
-          }}
-        >
-          ✐
-        </button>
-        <button
-          type='button'
-          className={`${classes.button} ${classes['delete']}`}
-          onClick={() => handleDeleteTask(task.id)}
-        >
-          ✖
-        </button>
-      </div>
-    </li>
+            {task.title}
+          </Text>
+          <Space>
+            <Button
+              color='primary'
+              variant='solid'
+              icon={<EditOutlined />}
+              onClick={handleStartEdit}
+            />
+            <Button
+              color='danger'
+              variant='solid'
+              icon={<DeleteOutlined />}
+              onClick={handleDeleteTask}
+            />
+          </Space>
+        </>
+      )}
+    </div>
   );
 };
 
