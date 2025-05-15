@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
-import {
-  updateUserTask,
-  deleteUserTask,
-  updateUserStatusTask,
-} from '../api/http';
-import { Task, FormValue } from '../types/types';
-import classes from './ListItem.module.css';
+import { updateTask, deleteTask, updateStatusTask } from '../api/tasks';
+import { Task, TaskInputValue } from '../types/types';
+import classes from './TaskItem.module.css';
 import { Button, Checkbox, Space, Typography, Form, message } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import {
@@ -14,17 +10,18 @@ import {
   CheckOutlined,
   RollbackOutlined,
 } from '@ant-design/icons';
+import { MAX_LENGTH_TASK, MIN_LENGTH_TASK } from '../constants/constants';
 
 const { Text } = Typography;
 
-type ListItemProps = {
+type TaskItemProps = {
   task: Task;
   updateTasks: () => Promise<void>;
 };
 
-const ListItem: React.FC<ListItemProps> = ({ task, updateTasks }) => {
+const TaskItem: React.FC<TaskItemProps> = ({ task, updateTasks }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [form] = Form.useForm<FormValue>();
+  const [form] = Form.useForm<TaskInputValue>();
 
   const handleStartEdit = () => {
     form.setFieldsValue({ value: task.title });
@@ -36,21 +33,21 @@ const ListItem: React.FC<ListItemProps> = ({ task, updateTasks }) => {
     form.resetFields();
   };
 
-  const handleChangeTask = async (formValue: FormValue) => {
+  const handleChangeTask = async (formValue: TaskInputValue) => {
     if (!formValue.value || formValue.value.length < 2) return;
-    await updateUserTask(task.id, formValue.value);
+    await updateTask(task.id, formValue.value);
     setIsEditing(false);
     message.success('Задача обновлена');
     await updateTasks();
   };
 
   const handleCheckedTask = async () => {
-    await updateUserStatusTask(task.id, !task.isDone);
+    await updateStatusTask(task.id, !task.isDone);
     await updateTasks();
   };
 
   const handleDeleteTask = async () => {
-    await deleteUserTask(task.id);
+    await deleteTask(task.id);
     message.success('Задача удалена');
     await updateTasks();
   };
@@ -64,8 +61,14 @@ const ListItem: React.FC<ListItemProps> = ({ task, updateTasks }) => {
               name='value'
               rules={[
                 { required: true, message: 'Поле обязательно!' },
-                { min: 2, message: 'Минимум 2 символа' },
-                { max: 64, message: 'Максимум 64 символа' },
+                {
+                  min: MIN_LENGTH_TASK,
+                  message: `Задача должна быть как минимум ${MIN_LENGTH_TASK} символа!`,
+                },
+                {
+                  max: MAX_LENGTH_TASK,
+                  message: `Задача должна быть не более ${MAX_LENGTH_TASK} символов!`,
+                },
               ]}
               style={{ flexGrow: 1, marginRight: '1rem' }}
             >
@@ -135,4 +138,4 @@ const ListItem: React.FC<ListItemProps> = ({ task, updateTasks }) => {
   );
 };
 
-export default ListItem;
+export default TaskItem;

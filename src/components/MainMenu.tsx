@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import { createElement, useState } from 'react';
 
-export default function LeftSider() {
+export default function MainMenu() {
   const location = useLocation();
   const navigate = useNavigate();
   const [onCollapse, setOnCollapse] = useState<boolean>(false);

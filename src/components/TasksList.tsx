@@ -1,13 +1,13 @@
 import { List } from 'antd';
-import ListItem from './ListItem';
+import TaskItem from './TaskItem';
 import { Task } from '../types/types';
 
-type ListElementsProps = {
+type TasksListProps = {
   tasks: Task[];
   updateTasks: () => Promise<void>;
 };
 
-const ListElements: React.FC<ListElementsProps> = ({ tasks, updateTasks }) => {
+const TasksList: React.FC<TasksListProps> = ({ tasks, updateTasks }) => {
   return (
     <List
       itemLayout='horizontal'
@@ -20,7 +20,7 @@ const ListElements: React.FC<ListElementsProps> = ({ tasks, updateTasks }) => {
             padding: 0,
           }}
         >
-          <ListItem task={task} updateTasks={updateTasks} />
+          <TaskItem task={task} updateTasks={updateTasks} />
         </List.Item>
       )}
       split={false}
@@ -28,4 +28,4 @@ const ListElements: React.FC<ListElementsProps> = ({ tasks, updateTasks }) => {
   );
 };
 
-export default ListElements;
+export default TasksList;

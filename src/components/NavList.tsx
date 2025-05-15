@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Filter, TaskInfo } from '../types/types';
+import { TaskFilter, TaskInfo } from '../types/types';
 import { Tabs, Typography } from 'antd';
 import type { TabsProps } from 'antd';
 const { Text } = Typography;
 
 export type NavListProps = {
-  updateTasks: (filter: Filter) => Promise<void>;
+  updateTasks: (filter: TaskFilter) => Promise<void>;
   tasksInfo: TaskInfo;
 };
 
@@ -25,10 +25,10 @@ const NavList: React.FC<NavListProps> = ({ updateTasks, tasksInfo }) => {
     },
   ];
 
-  const [activeFilter, setActiveFilter] = useState<Filter>('all');
+  const [activeFilter, setActiveFilter] = useState<TaskFilter>(TaskFilter.All);
 
   const onChange = async (key: string) => {
-    const filter = key as Filter;
+    const filter = key as TaskFilter;
     setActiveFilter(filter);
     await updateTasks(filter);
   };

@@ -3,7 +3,7 @@ import { Typography } from 'antd';
 const { Title } = Typography;
 const { Content } = Layout;
 
-export default function MyProfile() {
+export default function NotFound() {
   return (
     <Layout>
       <Content
@@ -15,8 +15,8 @@ export default function MyProfile() {
         }}
       >
         <Space>
-          <Title>Привет!</Title>
-        </Space>{' '}
+          <Title>Page not found...</Title>
+        </Space>
       </Content>
     </Layout>
   );

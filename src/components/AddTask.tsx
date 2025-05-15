@@ -1,21 +1,22 @@
-import { createUserTask } from '../api/http';
+import { createTask } from '../api/tasks';
 import { Button, Form, Input, message } from 'antd';
-import classes from './InputArea.module.css';
-import { FormValue } from '../types/types';
+import classes from './AddTask.module.css';
+import { TaskInputValue } from '../types/types';
+import { MAX_LENGTH_TASK, MIN_LENGTH_TASK } from '../constants/constants';
 
-type InputAreaProps = {
+type AddTaskProps = {
   updateTasks: () => Promise<void>;
 };
 
-const InputArea: React.FC<InputAreaProps> = ({ updateTasks }) => {
-  const [form] = Form.useForm<FormValue>();
+const AddTask: React.FC<AddTaskProps> = ({ updateTasks }) => {
+  const [form] = Form.useForm<TaskInputValue>();
 
-  const onFinish = async (formValue: FormValue) => {
+  const onFinish = async (formValue: TaskInputValue) => {
     message.success({
       content: 'Задача успешно добавлена!',
       duration: 2,
     });
-    await createUserTask(formValue.value);
+    await createTask(formValue.value);
     form.resetFields();
     await updateTasks();
   };
@@ -35,8 +36,14 @@ const InputArea: React.FC<InputAreaProps> = ({ updateTasks }) => {
         name='value'
         rules={[
           { required: true, message: 'Поле обязательно!' },
-          { min: 2, message: 'Задача должна быть как минимум 2 символа!' },
-          { max: 64, message: 'Задача должна быть не более 64 символов!' },
+          {
+            min: MIN_LENGTH_TASK,
+            message: `Задача должна быть как минимум ${MIN_LENGTH_TASK} символа!`,
+          },
+          {
+            max: MAX_LENGTH_TASK,
+            message: `Задача должна быть не более ${MAX_LENGTH_TASK} символов!`,
+          },
         ]}
       >
         <Input
@@ -57,4 +64,4 @@ const InputArea: React.FC<InputAreaProps> = ({ updateTasks }) => {
   );
 };
 
-export default InputArea;
+export default AddTask;
