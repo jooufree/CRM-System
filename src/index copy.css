@@ -1,0 +1,81 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  border: none;
+}
+
+:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+
+:focus::-moz-placeholder {
+  color: transparent;
+}
+
+:focus:-moz-placeholder {
+  color: transparent;
+}
+
+:focus:-ms-input-placeholder {
+  color: transparent;
+}
+
+main {
+  background-color: #f1f6f8;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1rem;
+}
+
+@keyframes borderAnimation {
+  0% {
+    border-color: #a2a0f2;
+  }
+  50% {
+    border-color: #007bff;
+  }
+  100% {
+    border-color: #a2a0f2;
+  }
+}
+
+.todo-wrapper {
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 35rem;
+  border: 3px solid #3399ff;
+  border-radius: 0.3rem;
+  animation: borderAnimation 6s infinite;
+  background: linear-gradient(white, rgba(79, 79, 248, 0.508));
+}
+
+@keyframes clicked {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+button:active {
+  animation: clicked 0.2s ease;
+}

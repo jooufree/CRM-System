@@ -1,17 +1,31 @@
+import js from '@eslint/js';
 import globals from 'globals';
-import pluginJs from '@eslint/js';
 import pluginReact from 'eslint-plugin-react';
+import pluginReactHooks from 'eslint-plugin-react-hooks';
+import pluginReactRefresh from 'eslint-plugin-react-refresh';
 import pluginPrettier from 'eslint-plugin-prettier';
 import configPrettier from 'eslint-config-prettier';
+import tseslint from 'typescript-eslint';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+import reactX from 'eslint-plugin-react-x';
+import reactDom from 'eslint-plugin-react-dom';
 
-/** @type {import('eslint').Linter.Config[]} */
-export default [
-  { files: ['**/*.{js,mjs,cjs,jsx}'] },
-  { languageOptions: { globals: globals.browser } },
-  pluginJs.configs.recommended,
-  pluginReact.configs.flat.recommended,
-  configPrettier,
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+export default tseslint.config(
+  { ignores: ['dist'] },
+
+  // JS + JSX
   {
+    files: ['**/*.{js,jsx,mjs,cjs}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+    ...js.configs.recommended,
+    ...pluginReact.configs.flat.recommended,
     plugins: {
       prettier: pluginPrettier,
     },
@@ -24,8 +38,44 @@ export default [
       'prefer-const': 'warn',
       'prettier/prettier': 'error',
       'no-console': 'warn',
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
+      // 'react/prop-types': 'off',
     },
   },
-];
+
+  // TS + TSX
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        project: path.resolve(__dirname, './tsconfig.app.json'),
+      },
+    },
+    extends: [...tseslint.configs.recommended, configPrettier],
+    plugins: {
+      prettier: pluginPrettier,
+      'react-hooks': pluginReactHooks,
+      'react-refresh': pluginReactRefresh,
+      'react-x': reactX,
+      'react-dom': reactDom,
+    },
+    rules: {
+      ...pluginReactHooks.configs.recommended.rules,
+      ...reactX.configs['recommended-typescript'].rules,
+      ...reactDom.configs.recommended.rules,
+      'prettier/prettier': 'error',
+      'prefer-const': 'warn',
+      'no-console': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      // '@typescript-eslint/no-unsafe-assignment': 'warn',
+      'react-refresh/only-export-components': [
+        'warn',
+
+        {
+          allowConstantExport: true,
+        },
+      ],
+    },
+  },
+);
