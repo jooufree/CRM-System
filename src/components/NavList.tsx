@@ -1,60 +1,47 @@
 import { useState } from 'react';
-import classes from './NavList.module.css';
-import { Filter, TaskInfo } from '../types/types';
+import { TaskFilter, TaskInfo } from '../types/types';
+import { Tabs, Typography } from 'antd';
+import type { TabsProps } from 'antd';
+const { Text } = Typography;
 
 export type NavListProps = {
-  updateTasks: (filter: Filter) => Promise<void>;
+  updateTasks: (filter: TaskFilter) => Promise<void>;
   tasksInfo: TaskInfo;
 };
 
 const NavList: React.FC<NavListProps> = ({ updateTasks, tasksInfo }) => {
-  const [activeButton, setActiveButton] = useState<Filter>('all');
+  const items: TabsProps['items'] = [
+    {
+      key: 'all',
+      label: <Text type='secondary'>Все задачи ({tasksInfo?.all})</Text>,
+    },
+    {
+      key: 'inWork',
+      label: <Text type='secondary'>В процессе ({tasksInfo?.inWork})</Text>,
+    },
+    {
+      key: 'completed',
+      label: <Text type='secondary'>Сделано ({tasksInfo?.completed})</Text>,
+    },
+  ];
+
+  const [activeFilter, setActiveFilter] = useState<TaskFilter>(TaskFilter.All);
+
+  const onChange = async (key: string) => {
+    const filter = key as TaskFilter;
+    setActiveFilter(filter);
+    await updateTasks(filter);
+  };
 
   return (
-    <nav className={classes['nav-bar-area']}>
-      <button
-        type='button'
-        className={
-          activeButton === 'all'
-            ? `${classes.button} ${classes.active} `
-            : classes.button
-        }
-        onClick={async () => {
-          setActiveButton('all');
-          await updateTasks('all');
-        }}
-      >
-        Все задачи ({tasksInfo?.all})
-      </button>
-      <button
-        type='button'
-        className={
-          activeButton === 'inWork'
-            ? `${classes.button} ${classes.active} `
-            : classes.button
-        }
-        onClick={async () => {
-          setActiveButton('inWork');
-          await updateTasks('inWork');
-        }}
-      >
-        В процессе ({tasksInfo?.inWork})
-      </button>
-      <button
-        type='button'
-        className={
-          activeButton === 'completed'
-            ? `${classes.button} ${classes.active} `
-            : classes.button
-        }
-        onClick={async () => {
-          setActiveButton('completed');
-          await updateTasks('completed');
-        }}
-      >
-        Сделано ({tasksInfo?.completed})
-      </button>
-    </nav>
+    <Tabs
+      activeKey={activeFilter}
+      onChange={onChange}
+      items={items}
+      type='line'
+      style={{ width: '27rem' }}
+      centered={true}
+    />
   );
 };
 

@@ -11,7 +11,12 @@ export type Task = {
   title: string;
 };
 
-export type Filter = 'all' | 'completed' | 'inWork';
+// export type TaskFilter = 'all' | 'completed' | 'inWork';
+export enum TaskFilter {
+  All = 'all',
+  Completed = 'completed',
+  InWork = 'inWork',
+}
 
 export type ErrorType = {
   message: string;
@@ -23,4 +28,8 @@ export type MetaResponse<T, N> = {
   meta: {
     totalAmount: number;
   };
+};
+
+export type TaskInputValue = {
+  value: string;
 };

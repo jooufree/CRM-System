@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { fetchTasks } from '../api/http';
-import { Task, TaskInfo, ErrorType, Filter } from '../types/types';
-import InputArea from '../components/InputArea';
+import { fetchTasks } from '../api/tasks';
+import { Task, TaskInfo, ErrorType, TaskFilter } from '../types/types';
+import AddTask from '../components/AddTask';
 import NavList from '../components/NavList';
-import ListElements from '../components/ListElements';
-import ErrorPage from '../components/Error';
+import TasksList from '../components/TasksList';
+import { message } from 'antd';
 
 const TodoListPage: React.FC = () => {
   const [tasksInfo, setTasksInfo] = useState<TaskInfo>({
@@ -13,26 +13,27 @@ const TodoListPage: React.FC = () => {
     completed: 0,
   });
   const [taskError, setTaskError] = useState<ErrorType>();
-  const [taskFilter, setTaskFilter] = useState<Filter>('all');
+  const [taskFilter, setTaskFilter] = useState<TaskFilter>(TaskFilter.All);
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
     async function fetchUserTasks() {
       try {
-        updateTasks(taskFilter);
+        await updateTasks(taskFilter);
       } catch (error) {
-        setTaskError({
-          message:
-            error instanceof Error
-              ? error.message
-              : 'Failed to fetch user task!',
-        });
+        const errorMessage =
+          error instanceof Error ? error.message : 'Failed to fetch tasks!';
+        setTaskError({ message: errorMessage });
+        message.error(errorMessage);
       }
     }
     fetchUserTasks();
+
+    const intervalId: number = setInterval(fetchUserTasks, 5000);
+    return () => clearInterval(intervalId);
   }, [taskFilter]);
 
-  async function updateTasks(filter: Filter) {
+  async function updateTasks(filter: TaskFilter) {
     const tasks = await fetchTasks(filter);
     setTasks(tasks.data);
     setTasksInfo(tasks.info);
@@ -41,13 +42,16 @@ const TodoListPage: React.FC = () => {
 
   return (
     <div className='todo-wrapper'>
-      <InputArea updateTasks={() => updateTasks(taskFilter)} />
-      {!taskError ? (
-        <NavList updateTasks={updateTasks} tasksInfo={tasksInfo} />
-      ) : (
-        <ErrorPage title='An error occurred!' message={taskError.message} />
+      <AddTask updateTasks={() => updateTasks(taskFilter)} />
+      {!taskError && (
+        <div>
+          <NavList updateTasks={updateTasks} tasksInfo={tasksInfo} />
+          <TasksList
+            tasks={tasks}
+            updateTasks={() => updateTasks(taskFilter)}
+          />
+        </div>
       )}
-      <ListElements tasks={tasks} updateTasks={() => updateTasks(taskFilter)} />
     </div>
   );
 };
